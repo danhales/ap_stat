@@ -1,15 +1,13 @@
+
 import matplotlib.pyplot as plt
 
 def get_stack_keys(data, num_stacks=5):
     """Creates a list containing the values where we will build our stacks.
-
     Returns an evenly-spaced list of real values of length num_stacks between
     lower_bound and upper_bound (the minimum and maximum values  in data,
     respectively).
-
     Because we want to include the upper_bound, we need to space the remaining
     values range / (num_stacks - 1) units apart from each other.
-
     ================================================================================
     Parameters
     ----------
@@ -18,7 +16,6 @@ def get_stack_keys(data, num_stacks=5):
         num_stacks (int):
             The number of stacks we want to build on our dotplot. Must be a whole
             number greater than 1. Default value is 5.
-
     Returns
     -------
     A list of real values where we want to place our stacks.
@@ -32,10 +29,8 @@ def get_stack_keys(data, num_stacks=5):
 
 def get_stack_dict(data, num_stacks=5, keys=None):
     """Assigns each observation to the appropriate stack.
-
     Creates a dictionary of lists, where each key is a stack_key, then
     adds observations to the list corresponding to the correct stack.
-
     ================================================================================
     Parameters
     ----------
@@ -47,7 +42,6 @@ def get_stack_dict(data, num_stacks=5, keys=None):
         keys (list-like):
             Particular values to use for the keys. This can create more attractive
             dotplots, but depends on the user including evenly-spaced keys.
-
     Returns
     -------
     A dictionary, where the keys are stack_keys, and the value corresopnding to
@@ -89,18 +83,15 @@ def get_stack_dict(data, num_stacks=5, keys=None):
 
 def get_points(stack_dict):
     """Generates a list of points for the scatterplot based on the stack_dict.
-
     Iterates over the keys in stack_dict, and creates a list of points whose
     x-values are the keys, and whose y-values allow the points to stack over the
     desired x-value.
-
     ================================================================================
     Parameters
     ----------
         stack_dict (dict):
             a dictionary whose keys are the desired x-values for the dotplot,
             and whose values are the number of observations falling on that stack.
-
     Returns
     -------
     A list of ordered pairs, representing points for the scatterplot to mimic a
@@ -122,16 +113,14 @@ def get_points(stack_dict):
 
 import matplotlib.pyplot as plt
 
-def dotplot(data, num_stacks=5, keys=None, rotation=None, filename='image.png', show=False):
+def dotplot(data, num_stacks=5, keys=None, rotation=None, title=None,
+            xlabel=None, ylabel=None, filename='image.png',  show=False):
     """Function to create the dotplot and save it to a file.
-
     This function provides a minimal interface for creating a dotplot with
     matplotlib. The smallest amount of information necessary to create the dotplot
     is a list of raw values for the data variable. For example:
-
         observations = [1,2,3,3,3,3,5,6,6,2,3,4,2,1,2]
         dotplot(data=observations)
-
     By default, this will create five stacks in the dotplot and save the file
     under the name 'image.png' in the working directory.
     ================================================================================
@@ -151,15 +140,22 @@ def dotplot(data, num_stacks=5, keys=None, rotation=None, filename='image.png', 
             the keys are decimals longer than 3 places and you want to prevent
             them from overlapping.
             Default: None
+        title (str):
+            Title of the plot
+            Default: None 
+        xlabel (str):
+            Label to be applied to the x-axis
+            Default: None
+        ylabel (str):
+            Label to be applied to the y-axis
+            Default: None
         filename (str):
             The name of the image.
             Default: 'image.png'
-
         show (bool):
             Whether or not to call plt.show(). If in a notebook, set show=True
             to show the dotplot inline.
             Default: False
-
     Returns
     -------
     None
@@ -185,8 +181,11 @@ def dotplot(data, num_stacks=5, keys=None, rotation=None, filename='image.png', 
     # plot the scatterplot
     plt.scatter(xs, ys, s=4000/len(keys))
 
-    # turn off the y-axis
-    plt.gca().get_yaxis().set_visible(False)
+    # in order to view the ylabel, leave y-axis visible just make yticks empty
+    if ylabel:
+        plt.yticks([])
+    else:
+        plt.gca().get_yaxis().set_visible(False)
 
     # set the x-ticks
     plt.xticks(list(stack_dict.keys()), fontsize=200/num_stacks, rotation=rotation)
@@ -198,6 +197,16 @@ def dotplot(data, num_stacks=5, keys=None, rotation=None, filename='image.png', 
     plt.gca().spines['top'].set_visible(False)
     plt.gca().spines['left'].set_visible(False)
     plt.gca().spines['right'].set_visible(False)
+
+    # add plot title, if specified
+    if title:
+        plt.title(title, fontsize=220/num_stacks)
+
+    # add axis labels, if specified
+    if xlabel:
+        plt.xlabel(xlabel, fontsize=180/num_stacks)
+    if ylabel:
+        plt.ylabel(ylabel, fontsize=180/num_stacks)
 
     # save the file
     plt.savefig(filename)
