@@ -204,9 +204,9 @@ def dotplot(data, num_stacks=5, keys=None, rotation=None, title=None,
 
     # add axis labels, if specified
     if xlabel:
-        plt.xlabel(xlabel, fontsize=180/num_stacks)
+        plt.xlabel(xlabel, fontsize=200/num_stacks)
     if ylabel:
-        plt.ylabel(ylabel, fontsize=180/num_stacks)
+        plt.ylabel(ylabel, fontsize=200/num_stacks)
 
     # save the file
     plt.savefig(filename)
